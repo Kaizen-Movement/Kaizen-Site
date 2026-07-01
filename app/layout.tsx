@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, IBM_Plex_Mono } from "next/font/google";
+import { Fraunces, Inter, IBM_Plex_Mono, Anton } from "next/font/google";
 import { CartProvider } from "@/lib/cart-context";
 import "./globals.css";
 
@@ -8,6 +8,12 @@ const fraunces = Fraunces({
   variable: "--font-fraunces",
   weight: ["400", "500", "600"],
   style: ["normal", "italic"],
+});
+
+const anton = Anton({
+  subsets: ["latin"],
+  variable: "--font-anton",
+  weight: "400",
 });
 
 const inter = Inter({
@@ -52,7 +58,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} ${plexMono.variable}`}>
+    <html lang="en" className={`${fraunces.variable} ${anton.variable} ${inter.variable} ${plexMono.variable}`}>
       <body>
         <CartProvider>{children}</CartProvider>
       </body>

@@ -26,13 +26,13 @@ export function FeaturedSection({
 
       <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[380px_1fr] lg:px-10">
         {/* Left: featured panel */}
-        <div className="relative flex min-h-[420px] flex-col justify-between overflow-hidden border border-gold/20 bg-gradient-to-br from-burgundy to-void p-8">
+        <div className="relative flex min-h-[420px] flex-col justify-between overflow-hidden border border-gold/20 bg-gradient-to-br from-burgundy via-burgundy-deep to-void p-8">
           <SealMark
             className="pointer-events-none absolute -bottom-10 -right-10 h-56 w-56 text-gold/10"
           />
           <p className="eyebrow">Kaizen Collection</p>
           <div>
-            <h2 className="font-display text-4xl leading-tight text-bone">
+            <h2 className="font-impact text-5xl uppercase leading-[0.9] text-bone">
               {panel.title}
             </h2>
             {panel.description && (

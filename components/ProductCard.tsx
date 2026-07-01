@@ -14,7 +14,7 @@ export function ProductCard({
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group block border border-white/10 bg-charcoal transition-colors hover:border-gold/40"
+      className="group block border border-white/10 bg-charcoal transition-all hover:border-crimson/50 hover:shadow-[0_0_24px_-8px_rgba(140,19,39,0.6)]"
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-panel">
         {coverUrl ? (

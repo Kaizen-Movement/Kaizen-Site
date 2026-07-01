@@ -1,14 +1,17 @@
 export function SealMark({
   className = "",
   animate = false,
+  style,
 }: {
   className?: string;
   animate?: boolean;
+  style?: React.CSSProperties;
 }) {
   return (
     <svg
       viewBox="0 0 100 100"
       className={`${className} ${animate ? "seal-mark" : ""}`}
+      style={style}
       aria-hidden="true"
     >
       <circle cx="50" cy="50" r="47" stroke="currentColor" strokeWidth="0.5" fill="none" opacity="0.9" />

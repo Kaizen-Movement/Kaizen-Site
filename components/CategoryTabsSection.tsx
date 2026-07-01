@@ -45,7 +45,7 @@ export function CategoryTabsSection({
                 onClick={() => setActiveSlug(cat.slug)}
                 className={`border-b-2 px-5 py-3 font-mono text-[11px] uppercase tracking-eyebrow transition-colors ${
                   isActive
-                    ? "border-gold text-gold"
+                    ? "border-crimson bg-burgundy/40 text-bone"
                     : "border-transparent text-bone/50 hover:text-bone"
                 }`}
               >

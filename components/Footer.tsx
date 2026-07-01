@@ -30,8 +30,9 @@ const COLUMNS = [
 
 export function Footer() {
   return (
-    <footer className="bg-charcoal">
-      <div className="mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
+    <footer className="relative bg-charcoal">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-burgundy-wash" />
+      <div className="relative mx-auto max-w-[1440px] px-6 py-16 lg:px-10">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr_1.2fr]">
           <div>
             <div className="flex items-center gap-3">

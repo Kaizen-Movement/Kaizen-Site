@@ -62,13 +62,12 @@ export default function CartPage() {
                 </span>
               </div>
 
-              <button
-                disabled
-                title="Checkout arrives in the next build phase"
-                className="mt-8 w-full cursor-not-allowed border border-white/15 py-4 font-mono text-[11px] uppercase tracking-eyebrow text-bone/40"
+              <Link
+                href="/checkout"
+                className="mt-8 block w-full border border-gold bg-gold py-4 text-center font-mono text-[11px] uppercase tracking-eyebrow text-void transition-colors hover:bg-transparent hover:text-gold"
               >
-                Checkout — Coming Soon
-              </button>
+                Proceed to Checkout
+              </Link>
             </div>
           )}
         </div>
