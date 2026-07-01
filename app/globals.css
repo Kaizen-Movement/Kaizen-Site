@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-void text-bone font-body antialiased;
+  }
+  ::selection {
+    @apply bg-gold/30 text-bone;
+  }
+  :focus-visible {
+    outline: 2px solid theme("colors.gold");
+    outline-offset: 3px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-eyebrow text-gold;
+  }
+  .rule {
+    @apply h-px w-full bg-white/10;
+  }
+}
+
+@keyframes seal-rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.seal-mark {
+  animation: seal-rotate 60s linear infinite;
+}
