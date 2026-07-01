@@ -8,9 +8,11 @@ import type { Category, Product } from "@/lib/types";
 export function CategoryTabsSection({
   categories,
   products,
+  coverUrls = {},
 }: {
   categories: Category[];
   products: Product[];
+  coverUrls?: Record<string, string | null>;
 }) {
   const tabCategories = categories.filter((c) => c.slug !== "software");
   const [activeSlug, setActiveSlug] = useState(tabCategories[0]?.slug ?? "");
@@ -57,7 +59,7 @@ export function CategoryTabsSection({
       <div className="mx-auto max-w-[1440px] px-6 py-8 lg:px-10">
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-5">
           {filtered.map((product) => (
-            <ProductCard key={product.id} product={product} coverUrl={null} />
+            <ProductCard key={product.id} product={product} coverUrl={coverUrls[product.id] ?? null} />
           ))}
           {filtered.length === 0 && (
             <p className="col-span-full py-12 text-center text-sm text-bone/40">

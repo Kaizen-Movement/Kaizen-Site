@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { resolveCoverUrls } from "@/lib/r2/resolve-covers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -53,6 +54,7 @@ export default async function CollectionPage({ params }: Props) {
   }
 
   const title = params.slug === "all" ? "All Products" : category?.name ?? "Collection";
+  const coverUrls = await resolveCoverUrls(products);
 
   return (
     <>
@@ -72,7 +74,7 @@ export default async function CollectionPage({ params }: Props) {
           {products.length > 0 ? (
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} coverUrl={null} />
+                <ProductCard key={product.id} product={product} coverUrl={coverUrls[product.id] ?? null} />
               ))}
             </div>
           ) : (

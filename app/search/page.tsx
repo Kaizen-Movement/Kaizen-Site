@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { resolveCoverUrls } from "@/lib/r2/resolve-covers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
@@ -61,6 +62,7 @@ export default async function SearchPage({ searchParams }: Props) {
   }
 
   const { data: products } = await query;
+  const coverUrls = await resolveCoverUrls((products ?? []) as Product[]);
 
   return (
     <>
@@ -87,7 +89,7 @@ export default async function SearchPage({ searchParams }: Props) {
           {products && products.length > 0 ? (
             <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
               {(products as Product[]).map((product) => (
-                <ProductCard key={product.id} product={product} coverUrl={null} />
+                <ProductCard key={product.id} product={product} coverUrl={coverUrls[product.id] ?? null} />
               ))}
             </div>
           ) : (

@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isCurrentUserAdmin } from "@/lib/auth";
+import { deleteFromR2 } from "@/lib/r2/storage";
 
 export interface ProductFormState {
   error?: string;
@@ -110,4 +111,36 @@ export async function toggleFeatured(productId: string, next: boolean) {
 
   revalidatePath("/admin/products");
   revalidatePath("/");
+}
+
+export async function deleteProductFile(fileId: string) {
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) throw new Error("Not authorized.");
+
+  const supabase = createClient();
+
+  const { data: file, error: fetchError } = await supabase
+    .from("product_files")
+    .select("id, r2_key, product_id")
+    .eq("id", fileId)
+    .maybeSingle();
+
+  if (fetchError) throw new Error(fetchError.message);
+  if (!file) return;
+
+  // Best-effort R2 cleanup — if this throws, we still remove the DB row
+  // rather than leaving a dangling reference an admin can't get rid of.
+  try {
+    await deleteFromR2(file.r2_key);
+  } catch {
+    // orphaned object in R2 is a much smaller problem than a stuck UI
+  }
+
+  const { error: deleteError } = await supabase
+    .from("product_files")
+    .delete()
+    .eq("id", fileId);
+  if (deleteError) throw new Error(deleteError.message);
+
+  revalidatePath(`/admin/products/${file.product_id}/edit`);
 }

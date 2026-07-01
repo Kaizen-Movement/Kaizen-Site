@@ -2,6 +2,8 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
+import { getSignedCoverUrl } from "@/lib/r2/storage";
+import { resolveCoverUrls } from "@/lib/r2/resolve-covers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SealMark } from "@/components/SealMark";
@@ -80,6 +82,14 @@ export default async function ProductPage({ params }: Props) {
 
   const faqItems = product.faq?.length ? product.faq : defaultFaq;
 
+  let coverUrl: string | null = null;
+  try {
+    coverUrl = await getSignedCoverUrl(product.cover_image_key);
+  } catch {
+    coverUrl = null;
+  }
+  const relatedCoverUrls = await resolveCoverUrls((related ?? []) as Product[]);
+
   return (
     <>
       <Header />
@@ -97,7 +107,16 @@ export default async function ProductPage({ params }: Props) {
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 px-6 pb-16 lg:grid-cols-2 lg:px-10">
           {/* Artwork */}
           <div className="flex aspect-square w-full items-center justify-center border border-white/10 bg-charcoal">
-            <SealMark className="h-32 w-32 text-gold/20" />
+            {coverUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={coverUrl}
+                alt={product.title}
+                className="h-full w-full object-cover"
+              />
+            ) : (
+              <SealMark className="h-32 w-32 text-gold/20" />
+            )}
           </div>
 
           {/* Info */}
@@ -187,7 +206,7 @@ export default async function ProductPage({ params }: Props) {
               <p className="eyebrow mb-6">Customers Also Viewed</p>
               <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 lg:grid-cols-4">
                 {(related as Product[]).map((p) => (
-                  <ProductCard key={p.id} product={p} coverUrl={null} />
+                  <ProductCard key={p.id} product={p} coverUrl={relatedCoverUrls[p.id] ?? null} />
                 ))}
               </div>
             </div>

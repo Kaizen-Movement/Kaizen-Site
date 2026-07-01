@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { resolveCoverUrls } from "@/lib/r2/resolve-covers";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeaturedSection } from "@/components/FeaturedSection";
@@ -48,14 +49,19 @@ export default async function HomePage() {
   const allProducts = (products ?? []) as Product[];
   const featured = allProducts.filter((p) => p.is_featured).slice(0, 6);
   const allCategories = (categories ?? []) as Category[];
+  const coverUrls = await resolveCoverUrls(allProducts);
 
   return (
     <>
       <Header />
       <main>
         <Hero content={hero} />
-        <FeaturedSection panel={panel} products={featured} />
-        <CategoryTabsSection categories={allCategories} products={allProducts} />
+        <FeaturedSection panel={panel} products={featured} coverUrls={coverUrls} />
+        <CategoryTabsSection
+          categories={allCategories}
+          products={allProducts}
+          coverUrls={coverUrls}
+        />
       </main>
       <Footer />
     </>

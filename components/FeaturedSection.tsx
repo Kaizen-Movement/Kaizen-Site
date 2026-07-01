@@ -6,9 +6,11 @@ import type { HomepageFeaturedPanel, Product } from "@/lib/types";
 export function FeaturedSection({
   panel,
   products,
+  coverUrls = {},
 }: {
   panel: HomepageFeaturedPanel;
   products: Product[];
+  coverUrls?: Record<string, string | null>;
 }) {
   return (
     <section className="border-b border-white/10">
@@ -44,7 +46,7 @@ export function FeaturedSection({
         {/* Right: product grid */}
         <div className="grid grid-cols-2 gap-5 md:grid-cols-3">
           {products.map((product) => (
-            <ProductCard key={product.id} product={product} coverUrl={null} />
+            <ProductCard key={product.id} product={product} coverUrl={coverUrls[product.id] ?? null} />
           ))}
         </div>
       </div>
