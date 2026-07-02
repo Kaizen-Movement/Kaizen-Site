@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 
 export default async function AdminOrdersPage() {
@@ -26,8 +27,15 @@ export default async function AdminOrdersPage() {
             </thead>
             <tbody>
               {orders.map((order) => (
-                <tr key={order.id} className="border-b border-white/5">
-                  <td className="p-4 text-bone">{order.customer_email}</td>
+                <tr key={order.id} className="border-b border-white/5 hover:bg-white/[0.02]">
+                  <td className="p-0">
+                    <Link
+                      href={`/admin/orders/${order.id}`}
+                      className="flex w-full items-center p-4 text-bone"
+                    >
+                      {order.customer_email}
+                    </Link>
+                  </td>
                   <td className="p-4 font-mono text-bone/60">{order.status}</td>
                   <td className="p-4 font-mono text-gold">
                     ${(order.total_cents / 100).toFixed(2)}

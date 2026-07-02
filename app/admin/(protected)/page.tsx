@@ -3,14 +3,36 @@ import { createClient } from "@/lib/supabase/server";
 export default async function AdminDashboard() {
   const supabase = createClient();
 
-  const [{ count: productCount }, { count: orderCount }, { data: orders }] =
-    await Promise.all([
-      supabase.from("products").select("*", { count: "exact", head: true }),
-      supabase.from("orders").select("*", { count: "exact", head: true }),
-      supabase.from("orders").select("total_cents").eq("status", "paid"),
-    ]);
+  const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-  const totalRevenueCents = (orders ?? []).reduce(
+  const [
+    { count: productCount },
+    { count: orderCount },
+    { data: paidOrders },
+    { data: weekOrders },
+    { count: pendingCount },
+    { count: customerCount },
+  ] = await Promise.all([
+    supabase.from("products").select("*", { count: "exact", head: true }),
+    supabase.from("orders").select("*", { count: "exact", head: true }),
+    supabase.from("orders").select("total_cents").eq("status", "paid"),
+    supabase
+      .from("orders")
+      .select("total_cents")
+      .eq("status", "paid")
+      .gte("created_at", weekAgo),
+    supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending"),
+    supabase.from("legacy_customers").select("*", { count: "exact", head: true }),
+  ]);
+
+  const totalRevenueCents = (paidOrders ?? []).reduce(
+    (sum, o) => sum + (o.total_cents ?? 0),
+    0
+  );
+  const weekRevenueCents = (weekOrders ?? []).reduce(
     (sum, o) => sum + (o.total_cents ?? 0),
     0
   );
@@ -18,9 +40,15 @@ export default async function AdminDashboard() {
   const stats = [
     { label: "Products", value: productCount ?? 0 },
     { label: "Orders", value: orderCount ?? 0 },
+    { label: "Pending Orders", value: pendingCount ?? 0 },
+    { label: "Customers", value: customerCount ?? 0 },
     {
-      label: "Revenue (paid)",
+      label: "Revenue (all time)",
       value: `$${(totalRevenueCents / 100).toFixed(2)}`,
+    },
+    {
+      label: "Revenue (last 7d)",
+      value: `$${(weekRevenueCents / 100).toFixed(2)}`,
     },
   ];
 

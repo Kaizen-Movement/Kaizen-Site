@@ -10,6 +10,8 @@ const NAV = [
   { label: "Bulk Upload", href: "/admin/bulk-upload" },
   { label: "Categories", href: "/admin/categories" },
   { label: "Orders", href: "/admin/orders" },
+  { label: "Customers", href: "/admin/customers" },
+  { label: "Homepage", href: "/admin/homepage" },
 ];
 
 export default async function AdminLayout({

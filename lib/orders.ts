@@ -211,7 +211,7 @@ export async function fulfillOrder(
   return results;
 }
 
-async function getExistingDownloadLinks(
+export async function getExistingDownloadLinks(
   orderId: string
 ): Promise<DownloadLinkResult[]> {
   const admin = createAdminClient();
