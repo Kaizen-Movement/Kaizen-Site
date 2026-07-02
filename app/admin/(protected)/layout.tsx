@@ -7,6 +7,7 @@ import { SealMark } from "@/components/SealMark";
 const NAV = [
   { label: "Dashboard", href: "/admin" },
   { label: "Products", href: "/admin/products" },
+  { label: "Bulk Upload", href: "/admin/bulk-upload" },
   { label: "Categories", href: "/admin/categories" },
   { label: "Orders", href: "/admin/orders" },
 ];
