@@ -51,8 +51,37 @@ export default async function HomePage() {
   const allCategories = (categories ?? []) as Category[];
   const coverUrls = await resolveCoverUrls(allProducts);
 
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Kaizen Subliminals",
+    url: "https://kaizensubliminals.store",
+  };
+
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Kaizen Subliminals",
+    url: "https://kaizensubliminals.store",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: "https://kaizensubliminals.store/search?q={search_term_string}",
+      "query-input": "required name=search_term_string",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+      />
       <Header />
       <main>
         <Hero content={hero} />

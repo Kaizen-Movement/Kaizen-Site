@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { SealMark } from "./SealMark";
 import { formatPrice, type Product } from "@/lib/types";
 
@@ -18,11 +19,12 @@ export function ProductCard({
     >
       <div className="relative aspect-[4/5] w-full overflow-hidden bg-panel">
         {coverUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
+          <Image
             src={coverUrl}
             alt={product.title}
-            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+            fill
+            sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+            className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center">

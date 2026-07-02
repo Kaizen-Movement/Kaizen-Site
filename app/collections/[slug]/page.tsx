@@ -11,14 +11,21 @@ interface Props {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  if (params.slug === "all") return { title: "All Products" };
+  const url = `https://kaizensubliminals.store/collections/${params.slug}`;
+  if (params.slug === "all") {
+    return { title: "All Products", alternates: { canonical: url } };
+  }
   const supabase = createClient();
   const { data } = await supabase
     .from("categories")
     .select("name, description")
     .eq("slug", params.slug)
     .maybeSingle();
-  return { title: data?.name ?? "Collection" };
+  return {
+    title: data?.name ?? "Collection",
+    description: data?.description ?? undefined,
+    alternates: { canonical: url },
+  };
 }
 
 export default async function CollectionPage({ params }: Props) {

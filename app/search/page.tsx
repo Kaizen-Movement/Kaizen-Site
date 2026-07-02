@@ -15,7 +15,11 @@ interface Props {
   };
 }
 
-export const metadata = { title: "Search" };
+export const metadata = {
+  title: "Search",
+  alternates: { canonical: "https://kaizensubliminals.store/search" },
+  robots: { index: false, follow: true },
+};
 
 export default async function SearchPage({ searchParams }: Props) {
   const supabase = createClient();

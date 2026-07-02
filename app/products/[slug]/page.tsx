@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { createClient } from "@/lib/supabase/server";
 import { getSignedCoverUrl } from "@/lib/r2/storage";
@@ -30,12 +31,26 @@ async function getProduct(slug: string) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const product = await getProduct(params.slug);
   if (!product) return {};
+
+  const url = `https://kaizensubliminals.store/products/${product.slug}`;
+  const ogImage = `https://kaizensubliminals.store/api/og/${product.slug}`;
+
   return {
     title: product.title,
     description: product.short_description ?? undefined,
+    alternates: { canonical: url },
     openGraph: {
       title: product.title,
       description: product.short_description ?? undefined,
+      url,
+      type: "website",
+      images: [{ url: ogImage, width: 1200, height: 1200 }],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: product.title,
+      description: product.short_description ?? undefined,
+      images: [ogImage],
     },
   };
 }
@@ -90,8 +105,29 @@ export default async function ProductPage({ params }: Props) {
   }
   const relatedCoverUrls = await resolveCoverUrls((related ?? []) as Product[]);
 
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    description: product.short_description ?? product.long_description ?? undefined,
+    image: `https://kaizensubliminals.store/api/og/${product.slug}`,
+    sku: product.slug,
+    offers: {
+      "@type": "Offer",
+      url: `https://kaizensubliminals.store/products/${product.slug}`,
+      priceCurrency: "USD",
+      price: (product.price_cents / 100).toFixed(2),
+      availability: "https://schema.org/InStock",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // eslint-disable-next-line react/no-danger
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
       <Header />
       <main className="pt-24">
         <div className="mx-auto max-w-[1440px] px-6 py-4 lg:px-10">
@@ -106,13 +142,15 @@ export default async function ProductPage({ params }: Props) {
 
         <div className="mx-auto grid max-w-[1440px] grid-cols-1 gap-12 px-6 pb-16 lg:grid-cols-2 lg:px-10">
           {/* Artwork */}
-          <div className="flex aspect-square w-full items-center justify-center border border-white/10 bg-charcoal">
+          <div className="relative flex aspect-square w-full items-center justify-center border border-white/10 bg-charcoal">
             {coverUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
+              <Image
                 src={coverUrl}
                 alt={product.title}
-                className="h-full w-full object-cover"
+                fill
+                priority
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
               />
             ) : (
               <SealMark className="h-32 w-32 text-gold/20" />
