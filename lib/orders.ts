@@ -1,5 +1,12 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendEmail } from "@/lib/email/resend";
+import { renderOrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
+
+function toAbsoluteUrl(path: string): string {
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kaizensubliminals.store";
+  return `${base.replace(/\/$/, "")}${path}`;
+}
 
 export interface CartLineInput {
   productId: string;
@@ -110,13 +117,15 @@ export async function fulfillOrder(
 
   const { data: order, error: orderError } = await admin
     .from("orders")
-    .select("id, status")
+    .select("id, status, customer_email, total_cents, currency")
     .eq("id", orderId)
     .maybeSingle();
 
   if (orderError || !order) throw new Error("Order not found.");
 
   // Already fulfilled — return existing tokens instead of minting new ones.
+  // Note this also means we don't re-send the confirmation email here: the
+  // email only fires once, below, on the actual pending -> paid transition.
   if (order.status === "paid") {
     return getExistingDownloadLinks(orderId);
   }
@@ -166,6 +175,36 @@ export async function fulfillOrder(
           downloadPath: `/download/${tokenRow.token}`,
         });
       }
+    }
+  }
+
+  // Best-effort — a failed email must never undo a successful payment or
+  // block the customer from seeing their download links in the browser
+  // (the checkout UI shows them directly regardless of email delivery).
+  if (order.customer_email) {
+    const { subject, html } = renderOrderConfirmationEmail({
+      orderId,
+      totalCents: order.total_cents,
+      currency: order.currency,
+      items: results.map((r) => ({
+        productTitle: r.productTitle,
+        downloadUrl: r.downloadPath ? toAbsoluteUrl(r.downloadPath) : null,
+        note: r.note,
+      })),
+    });
+
+    const emailResult = await sendEmail({
+      to: order.customer_email,
+      subject,
+      html,
+    });
+
+    if (!emailResult.sent) {
+      // Swallowed deliberately — logged for visibility (shows up in Vercel
+      // runtime logs) but never thrown, since fulfillment already succeeded.
+      console.error(
+        `Order confirmation email failed for order ${orderId}: ${emailResult.error}`
+      );
     }
   }
 
