@@ -18,9 +18,15 @@ export async function POST(request: Request) {
   const { productId, kind, fileName, contentType, fileSize } =
     await request.json();
 
-  if (!productId || !kind || !fileName || !contentType) {
+  if (!kind || !fileName || !contentType) {
     return NextResponse.json(
-      { error: "productId, kind, fileName, and contentType are required." },
+      { error: "kind, fileName, and contentType are required." },
+      { status: 400 }
+    );
+  }
+  if (kind === "cover" && !productId) {
+    return NextResponse.json(
+      { error: "productId is required for cover uploads." },
       { status: 400 }
     );
   }
@@ -42,7 +48,7 @@ export async function POST(request: Request) {
   const key =
     kind === "cover"
       ? `covers/${productId}/${Date.now()}-${safeName}`
-      : `deliverables/${productId}/${Date.now()}-${safeName}`;
+      : `deliverables/${productId ?? "unassigned"}/${Date.now()}-${safeName}`;
 
   const uploadUrl = await getSignedUploadUrl(key, contentType);
 

@@ -28,7 +28,7 @@ const FALLBACK_PANEL: HomepageFeaturedPanel = {
 export default async function HomePage() {
   const supabase = createClient();
 
-  const [{ data: categories }, { data: products }, { data: content }] =
+  const [{ data: categories }, { data: products }, { data: featuredProducts }, { data: content }] =
     await Promise.all([
       supabase.from("categories").select("*").order("sort_order"),
       supabase
@@ -37,6 +37,17 @@ export default async function HomePage() {
         .eq("status", "published")
         .order("sort_order")
         .limit(24),
+      // Queried directly rather than filtered from the capped list above —
+      // every imported product shares sort_order=0, so Postgres returns
+      // that tie in an unstable order and a featured product could fall
+      // outside the first 24 by chance, silently emptying this section.
+      supabase
+        .from("products")
+        .select("*")
+        .eq("status", "published")
+        .eq("is_featured", true)
+        .order("sort_order")
+        .limit(6),
       supabase.from("homepage_content").select("*"),
     ]);
 
@@ -47,9 +58,12 @@ export default async function HomePage() {
   const panel: HomepageFeaturedPanel = panelRow?.value ?? FALLBACK_PANEL;
 
   const allProducts = (products ?? []) as Product[];
-  const featured = allProducts.filter((p) => p.is_featured).slice(0, 6);
+  const featured = (featuredProducts ?? []) as Product[];
   const allCategories = (categories ?? []) as Category[];
-  const coverUrls = await resolveCoverUrls(allProducts);
+  const coverUrls = await resolveCoverUrls([
+    ...allProducts,
+    ...featured.filter((f) => !allProducts.some((p) => p.id === f.id)),
+  ]);
 
   const organizationJsonLd = {
     "@context": "https://schema.org",

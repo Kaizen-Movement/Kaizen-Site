@@ -11,9 +11,15 @@ export async function POST(request: Request) {
   const { productId, kind, key, fileName, fileType, fileSize } =
     await request.json();
 
-  if (!productId || !kind || !key) {
+  if (!kind || !key) {
     return NextResponse.json(
-      { error: "productId, kind, and key are required." },
+      { error: "kind and key are required." },
+      { status: 400 }
+    );
+  }
+  if (kind === "cover" && !productId) {
+    return NextResponse.json(
+      { error: "productId is required for cover uploads." },
       { status: 400 }
     );
   }
@@ -30,7 +36,7 @@ export async function POST(request: Request) {
     }
   } else {
     const { error } = await supabase.from("product_files").insert({
-      product_id: productId,
+      product_id: productId ?? null,
       r2_key: key,
       file_name: fileName ?? key,
       file_type: fileType ?? "audio",

@@ -14,7 +14,7 @@ interface Props {
 export default async function EditProductPage({ params }: Props) {
   const supabase = createClient();
 
-  const [{ data: product }, { data: categories }, { data: files }] =
+  const [{ data: product }, { data: categories }, { data: files }, { data: unassignedFiles }] =
     await Promise.all([
       supabase.from("products").select("*").eq("id", params.id).maybeSingle(),
       supabase.from("categories").select("*").order("sort_order"),
@@ -22,6 +22,11 @@ export default async function EditProductPage({ params }: Props) {
         .from("product_files")
         .select("*")
         .eq("product_id", params.id)
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("product_files")
+        .select("id, file_name, file_type, file_size_bytes")
+        .is("product_id", null)
         .order("created_at", { ascending: false }),
     ]);
 
@@ -42,6 +47,7 @@ export default async function EditProductPage({ params }: Props) {
         <ProductFilesManager
           productId={product.id}
           files={files ?? []}
+          unassignedFiles={unassignedFiles ?? []}
           onDelete={deleteProductFile}
         />
       </div>

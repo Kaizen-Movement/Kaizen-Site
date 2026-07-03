@@ -142,5 +142,28 @@ export async function deleteProductFile(fileId: string) {
     .eq("id", fileId);
   if (deleteError) throw new Error(deleteError.message);
 
-  revalidatePath(`/admin/products/${file.product_id}/edit`);
+  if (file.product_id) {
+    revalidatePath(`/admin/products/${file.product_id}/edit`);
+  }
+  revalidatePath("/admin/media");
+}
+
+/**
+ * Attaches a previously-uploaded unassigned file (from the Media Library)
+ * to a product — no re-upload needed, just a database link.
+ */
+export async function assignFileToProduct(fileId: string, productId: string) {
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) throw new Error("Not authorized.");
+
+  const supabase = createClient();
+  const { error } = await supabase
+    .from("product_files")
+    .update({ product_id: productId })
+    .eq("id", fileId);
+
+  if (error) throw new Error(error.message);
+
+  revalidatePath(`/admin/products/${productId}/edit`);
+  revalidatePath("/admin/media");
 }

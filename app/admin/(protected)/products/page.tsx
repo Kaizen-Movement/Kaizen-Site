@@ -18,12 +18,20 @@ export default async function AdminProductsPage() {
           <p className="eyebrow mb-2">Catalog</p>
           <h1 className="font-display text-3xl text-bone">Products</h1>
         </div>
-        <Link
-          href="/admin/products/new"
-          className="border border-gold bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-eyebrow text-void hover:bg-transparent hover:text-gold"
-        >
-          + New Product
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/admin/products/import"
+            className="border border-white/20 px-5 py-2.5 font-mono text-[11px] uppercase tracking-eyebrow text-bone/70 hover:border-gold hover:text-gold"
+          >
+            Import CSV
+          </Link>
+          <Link
+            href="/admin/products/new"
+            className="border border-gold bg-gold px-5 py-2.5 font-mono text-[11px] uppercase tracking-eyebrow text-void hover:bg-transparent hover:text-gold"
+          >
+            + New Product
+          </Link>
+        </div>
       </div>
 
       <div className="mt-8 border border-white/10">
