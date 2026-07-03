@@ -6,6 +6,11 @@ import { ProductCard } from "@/components/ProductCard";
 import { SearchFilters } from "@/components/SearchFilters";
 import type { Category, Product } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+
+
 interface Props {
   searchParams: {
     q?: string;

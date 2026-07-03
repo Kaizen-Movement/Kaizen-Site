@@ -6,6 +6,11 @@ import { Footer } from "@/components/Footer";
 import { ProductCard } from "@/components/ProductCard";
 import type { Category, Product } from "@/lib/types";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+
+
 interface Props {
   params: { slug: string };
 }

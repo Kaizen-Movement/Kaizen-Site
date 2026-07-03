@@ -6,11 +6,16 @@ import { FeaturedSection } from "@/components/FeaturedSection";
 import { CategoryTabsSection } from "@/components/CategoryTabsSection";
 import { Footer } from "@/components/Footer";
 import type {
+
   Category,
   HomepageFeaturedPanel,
   HomepageHero,
   Product,
 } from "@/lib/types";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 
 const FALLBACK_HERO: HomepageHero = {
   title: "Kaizen",
