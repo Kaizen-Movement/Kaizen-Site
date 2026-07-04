@@ -6,6 +6,7 @@ const NAV_LINKS = [
   { label: "Self Improvement", href: "/collections/self-improvement" },
   { label: "Lifestyle", href: "/collections/lifestyle" },
   { label: "Software", href: "/collections/software" },
+  { label: "Custom Request", href: "/custom-request" },
   { label: "About", href: "/about" },
 ];
 

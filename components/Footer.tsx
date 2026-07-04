@@ -6,7 +6,7 @@ const COLUMNS = [
     heading: "Shop",
     links: [
       { label: "All Products", href: "/collections/all" },
-      { label: "Subliminals", href: "/collections/subliminal" },
+      { label: "Custom Request", href: "/custom-request" },
       { label: "Software", href: "/collections/software" },
     ],
   },
