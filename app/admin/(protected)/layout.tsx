@@ -11,6 +11,7 @@ const NAV = [
   { label: "Media Library", href: "/admin/media" },
   { label: "Categories", href: "/admin/categories" },
   { label: "Orders", href: "/admin/orders" },
+  { label: "Abandoned Checkouts", href: "/admin/abandoned-checkouts" },
   { label: "Customers", href: "/admin/customers" },
   { label: "Homepage", href: "/admin/homepage" },
 ];

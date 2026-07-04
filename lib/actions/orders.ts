@@ -6,6 +6,7 @@ import { isCurrentUserAdmin } from "@/lib/auth";
 import { getExistingDownloadLinks } from "@/lib/orders";
 import { sendEmail } from "@/lib/email/resend";
 import { renderOrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
+import { renderCheckoutReminderEmail } from "@/lib/email/templates/checkout-reminder";
 
 function toAbsoluteUrl(path: string): string {
   const base = process.env.NEXT_PUBLIC_SITE_URL ?? "https://kaizensubliminals.store";
@@ -100,5 +101,60 @@ export async function regenerateDownloadToken(
 
   revalidatePath("/admin/orders");
   revalidatePath(`/admin/orders/${orderId}`);
+  return { success: true };
+}
+
+/**
+ * Sends a "you left something in your cart" reminder for a still-pending
+ * order (i.e. an abandoned checkout — email + items were captured but
+ * payment was never completed). Does not touch order status; the order
+ * stays pending until the customer actually pays or it's cleaned up
+ * separately.
+ */
+export async function resendCheckoutReminder(orderId: string): Promise<ActionResult> {
+  const isAdmin = await isCurrentUserAdmin();
+  if (!isAdmin) return { error: "Not authorized." };
+
+  const supabase = createClient();
+
+  const { data: order, error: orderError } = await supabase
+    .from("orders")
+    .select("id, status, customer_email")
+    .eq("id", orderId)
+    .maybeSingle();
+
+  if (orderError || !order) return { error: "Order not found." };
+  if (order.status !== "pending") {
+    return { error: "This order is no longer pending — nothing to remind about." };
+  }
+  if (!order.customer_email) return { error: "No email on file for this checkout." };
+
+  const { data: items, error: itemsError } = await supabase
+    .from("order_items")
+    .select("product_title_snapshot, product_id")
+    .eq("order_id", orderId);
+
+  if (itemsError || !items || items.length === 0) {
+    return { error: "No items found on this order." };
+  }
+
+  const productIds = items.map((i) => i.product_id).filter(Boolean) as string[];
+  const { data: products } = await supabase
+    .from("products")
+    .select("id, slug")
+    .in("id", productIds);
+
+  const slugById = new Map((products ?? []).map((p) => [p.id, p.slug]));
+
+  const { subject, html } = renderCheckoutReminderEmail({
+    items: items.map((i) => ({
+      productTitle: i.product_title_snapshot,
+      slug: (i.product_id && slugById.get(i.product_id)) || "",
+    })),
+  });
+
+  const result = await sendEmail({ to: order.customer_email, subject, html });
+  if (!result.sent) return { error: result.error ?? "Email failed to send." };
+
   return { success: true };
 }

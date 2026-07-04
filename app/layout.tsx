@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, Inter, IBM_Plex_Mono, Anton } from "next/font/google";
 import { CartProvider } from "@/lib/cart-context";
+import { VisitorHeartbeat } from "@/components/VisitorHeartbeat";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -60,6 +61,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${fraunces.variable} ${anton.variable} ${inter.variable} ${plexMono.variable}`}>
       <body>
+        <VisitorHeartbeat />
         <CartProvider>{children}</CartProvider>
       </body>
     </html>

@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/server";
+import { LiveVisitorsCard } from "@/components/admin/LiveVisitorsCard";
 
 export default async function AdminDashboard() {
   const supabase = createClient();
 
   const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+  const abandonedCutoff = new Date(Date.now() - 30 * 60 * 1000).toISOString();
 
   const [
     { count: productCount },
@@ -12,6 +14,7 @@ export default async function AdminDashboard() {
     { data: weekOrders },
     { count: pendingCount },
     { count: customerCount },
+    { count: abandonedCount },
   ] = await Promise.all([
     supabase.from("products").select("*", { count: "exact", head: true }),
     supabase.from("orders").select("*", { count: "exact", head: true }),
@@ -26,6 +29,11 @@ export default async function AdminDashboard() {
       .select("*", { count: "exact", head: true })
       .eq("status", "pending"),
     supabase.from("legacy_customers").select("*", { count: "exact", head: true }),
+    supabase
+      .from("orders")
+      .select("*", { count: "exact", head: true })
+      .eq("status", "pending")
+      .lt("created_at", abandonedCutoff),
   ]);
 
   const totalRevenueCents = (paidOrders ?? []).reduce(
@@ -41,6 +49,7 @@ export default async function AdminDashboard() {
     { label: "Products", value: productCount ?? 0 },
     { label: "Orders", value: orderCount ?? 0 },
     { label: "Pending Orders", value: pendingCount ?? 0 },
+    { label: "Abandoned Checkouts", value: abandonedCount ?? 0 },
     { label: "Customers", value: customerCount ?? 0 },
     {
       label: "Revenue (all time)",
@@ -58,6 +67,7 @@ export default async function AdminDashboard() {
       <h1 className="font-display text-3xl text-bone">Dashboard</h1>
 
       <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-3">
+        <LiveVisitorsCard />
         {stats.map((stat) => (
           <div
             key={stat.label}
