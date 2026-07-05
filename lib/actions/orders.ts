@@ -156,5 +156,11 @@ export async function resendCheckoutReminder(orderId: string): Promise<ActionRes
   const result = await sendEmail({ to: order.customer_email, subject, html });
   if (!result.sent) return { error: result.error ?? "Email failed to send." };
 
+  await supabase
+    .from("orders")
+    .update({ reminder_sent_at: new Date().toISOString() })
+    .eq("id", orderId);
+
+  revalidatePath("/admin/abandoned-checkouts");
   return { success: true };
 }

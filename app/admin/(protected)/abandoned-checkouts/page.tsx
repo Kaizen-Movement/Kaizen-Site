@@ -19,7 +19,7 @@ export default async function AbandonedCheckoutsPage() {
 
   const { data: orders } = await supabase
     .from("orders")
-    .select("id, customer_email, total_cents, currency, created_at")
+    .select("id, customer_email, total_cents, currency, created_at, reminder_sent_at")
     .eq("status", "pending")
     .lt("created_at", cutoff)
     .order("created_at", { ascending: false })
@@ -47,8 +47,10 @@ export default async function AbandonedCheckoutsPage() {
       <p className="mb-8 max-w-2xl text-sm text-bone/50">
         Checkouts where a customer entered their email and started paying
         (via PayPal) but never completed the purchase, at least{" "}
-        {STALE_AFTER_MINUTES} minutes ago. This doesn't capture carts
-        abandoned before checkout was ever started — only checkouts.
+        {STALE_AFTER_MINUTES} minutes ago. A reminder email now sends
+        automatically once a day for anything not yet reminded — the button
+        below is for sending one immediately instead of waiting, or sending
+        a second nudge.
       </p>
 
       {orders && orders.length > 0 ? (
@@ -60,6 +62,7 @@ export default async function AbandonedCheckoutsPage() {
                 <th className="p-4">Items</th>
                 <th className="p-4">Value</th>
                 <th className="p-4">Abandoned</th>
+                <th className="p-4">Reminder</th>
                 <th className="p-4"></th>
               </tr>
             </thead>
@@ -74,6 +77,15 @@ export default async function AbandonedCheckoutsPage() {
                     ${(order.total_cents / 100).toFixed(2)}
                   </td>
                   <td className="p-4 text-bone/40">{timeAgo(order.created_at)}</td>
+                  <td className="p-4 font-mono text-[10px] uppercase tracking-eyebrow">
+                    {order.reminder_sent_at ? (
+                      <span className="text-green-400">
+                        Sent {timeAgo(order.reminder_sent_at)}
+                      </span>
+                    ) : (
+                      <span className="text-bone/30">Not yet</span>
+                    )}
+                  </td>
                   <td className="p-4">
                     <ReminderButton orderId={order.id} />
                   </td>
