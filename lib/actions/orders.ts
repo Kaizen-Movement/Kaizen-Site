@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { isCurrentUserAdmin } from "@/lib/auth";
 import { getExistingDownloadLinks } from "@/lib/orders";
-import { sendEmail } from "@/lib/email/resend";
+import { sendEmail } from "@/lib/email/sender";
 import { renderOrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 import { renderCheckoutReminderEmail } from "@/lib/email/templates/checkout-reminder";
 

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendEmail } from "@/lib/email/resend";
+import { sendEmail } from "@/lib/email/sender";
 import { renderCheckoutReminderEmail } from "@/lib/email/templates/checkout-reminder";
 
 const MIN_AGE_MS = 30 * 60 * 1000; // don't remind anyone still mid-checkout

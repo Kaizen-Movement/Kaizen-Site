@@ -1,6 +1,6 @@
 import "server-only";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { sendEmail } from "@/lib/email/resend";
+import { sendEmail } from "@/lib/email/sender";
 import { renderOrderConfirmationEmail } from "@/lib/email/templates/order-confirmation";
 
 function toAbsoluteUrl(path: string): string {
