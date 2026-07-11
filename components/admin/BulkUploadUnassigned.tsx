@@ -43,7 +43,11 @@ export function BulkUploadUnassigned() {
         kind: "deliverable",
         key: presignData.key,
         fileName: file.name,
-        fileType: file.type?.startsWith("audio") ? "audio" : "software",
+        fileType: file.type?.startsWith("audio")
+          ? "audio"
+          : file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")
+            ? "pdf"
+            : "software",
         fileSize: file.size,
       }),
     });

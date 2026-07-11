@@ -24,6 +24,12 @@ interface Row {
 
 const CONCURRENCY = 3;
 
+function classifyFileType(file: File): string {
+  if (file.type?.startsWith("audio")) return "audio";
+  if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) return "pdf";
+  return "software";
+}
+
 export function BulkAudioUploader({
   products,
 }: {
@@ -102,7 +108,7 @@ export function BulkAudioUploader({
           kind: "deliverable",
           key: presignData.key,
           fileName: row.file.name,
-          fileType: row.file.type?.startsWith("audio") ? "audio" : "audio",
+          fileType: classifyFileType(row.file),
           fileSize: row.file.size,
         }),
       });
@@ -165,7 +171,7 @@ export function BulkAudioUploader({
         className="flex flex-col items-center justify-center border border-dashed border-white/20 px-6 py-12 text-center"
       >
         <p className="text-sm text-bone/60">
-          Drag and drop audio files here, or
+          Drag and drop audio or PDF files here, or
         </p>
         <button
           type="button"
@@ -178,7 +184,7 @@ export function BulkAudioUploader({
           ref={inputRef}
           type="file"
           multiple
-          accept="audio/*"
+          accept="audio/*,application/pdf,.pdf"
           className="hidden"
           onChange={(e) => handleFiles(e.target.files)}
         />
