@@ -20,6 +20,18 @@ export function getR2Client() {
     region: "auto",
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId, secretAccessKey },
+    // R2 only supports path-style requests (bucket in the URL path, e.g.
+    // https://<account>.r2.cloudflarestorage.com/<bucket>/<key>) — it does
+    // NOT support virtual-hosted-style (bucket as a subdomain), unlike AWS
+    // S3. The AWS SDK defaults to virtual-hosted-style unless told
+    // otherwise, which produces URLs like
+    // https://kaizen-site.<account>.r2.cloudflarestorage.com/<key> — an
+    // extra subdomain level that fails TLS validation against R2's
+    // wildcard certificate. This surfaces in the browser as a generic,
+    // status-less "Failed to fetch" on the direct PUT to R2, with no
+    // useful error from R2 itself since the request never completes a
+    // TLS handshake.
+    forcePathStyle: true,
   });
 
   return cachedClient;
