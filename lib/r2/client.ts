@@ -32,6 +32,17 @@ export function getR2Client() {
     // useful error from R2 itself since the request never completes a
     // TLS handshake.
     forcePathStyle: true,
+    // Newer AWS SDK v3 releases (package.json allows any 3.x, currently
+    // resolving to 3.1077.0) default to attaching an automatic CRC32
+    // request checksum to S3 operations, including presigned URLs — the
+    // checksum is computed as a placeholder at presign time (since the
+    // real file body isn't known yet), baked into the signed query
+    // string as x-amz-checksum-crc32/x-amz-sdk-checksum-algorithm, and
+    // R2 then rejects the actual upload with 400 because the real
+    // content doesn't match that placeholder. AWS S3 itself tolerates
+    // this; R2 (and other S3-compatible services) don't. Setting this to
+    // WHEN_REQUIRED restores the old opt-in-only behavior.
+    requestChecksumCalculation: "WHEN_REQUIRED",
   });
 
   return cachedClient;
