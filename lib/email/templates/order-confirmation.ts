@@ -23,13 +23,13 @@ function formatPrice(cents: number, currency: string): string {
 // Brand tokens mirrored from tailwind.config.ts — email clients don't load
 // Tailwind, so these are hardcoded to stay in sync with the site palette.
 const COLORS = {
-  void: "#0C0407",
-  charcoal: "#1A0E12",
-  panel: "#200F14",
-  burgundy: "#4A0E1C",
-  crimson: "#8C1327",
-  gold: "#C9A227",
-  bone: "#F3EFE6",
+  void: "#05080D",
+  charcoal: "#0D1522",
+  panel: "#101D2E",
+  burgundy: "#123252",
+  crimson: "#3AA9D6",
+  gold: "#AEDCEA",
+  bone: "#EAF3F7",
 };
 
 export function renderOrderConfirmationEmail({
@@ -69,9 +69,9 @@ export function renderOrderConfirmationEmail({
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${COLORS.void};padding:40px 0;">
       <tr>
         <td align="center">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:${COLORS.charcoal};border:1px solid rgba(201,162,39,0.2);">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:${COLORS.charcoal};border:1px solid rgba(174,220,234,0.2);">
             <tr>
-              <td style="padding:40px 40px 24px 40px;text-align:center;border-bottom:1px solid rgba(201,162,39,0.15);">
+              <td style="padding:40px 40px 24px 40px;text-align:center;border-bottom:1px solid rgba(174,220,234,0.15);">
                 <p style="margin:0;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${COLORS.gold};font-family:Helvetica,Arial,sans-serif;">Kaizen Subliminals</p>
                 <h1 style="margin:16px 0 0 0;font-size:24px;color:${COLORS.bone};font-family:Georgia,serif;font-weight:400;">Your order is ready</h1>
               </td>

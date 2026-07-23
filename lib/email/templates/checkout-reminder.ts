@@ -6,10 +6,10 @@ export interface AbandonedCheckoutItem {
 }
 
 const COLORS = {
-  void: "#0C0407",
-  charcoal: "#1A0E12",
-  gold: "#C9A227",
-  bone: "#F3EFE6",
+  void: "#05080D",
+  charcoal: "#0D1522",
+  gold: "#AEDCEA",
+  bone: "#EAF3F7",
 };
 
 export function renderCheckoutReminderEmail({
@@ -41,9 +41,9 @@ export function renderCheckoutReminderEmail({
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:${COLORS.void};padding:40px 0;">
       <tr>
         <td align="center">
-          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:${COLORS.charcoal};border:1px solid rgba(201,162,39,0.2);">
+          <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;width:100%;background-color:${COLORS.charcoal};border:1px solid rgba(174,220,234,0.2);">
             <tr>
-              <td style="padding:40px 40px 24px 40px;text-align:center;border-bottom:1px solid rgba(201,162,39,0.15);">
+              <td style="padding:40px 40px 24px 40px;text-align:center;border-bottom:1px solid rgba(174,220,234,0.15);">
                 <p style="margin:0;font-size:11px;letter-spacing:0.22em;text-transform:uppercase;color:${COLORS.gold};font-family:Helvetica,Arial,sans-serif;">Kaizen Subliminals</p>
                 <h1 style="margin:16px 0 0 0;font-size:22px;color:${COLORS.bone};font-family:Georgia,serif;font-weight:400;">Still thinking it over?</h1>
               </td>

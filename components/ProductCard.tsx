@@ -60,7 +60,7 @@ export function ProductCard({
         className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{
           opacity: glow.active ? 1 : 0,
-          background: `radial-gradient(280px circle at ${glow.x}% ${glow.y}%, rgba(201,162,39,0.18), transparent 65%)`,
+          background: `radial-gradient(280px circle at ${glow.x}% ${glow.y}%, rgba(174,220,234,0.18), transparent 65%)`,
         }}
       />
 

@@ -105,9 +105,9 @@ export default function CustomRequestPage() {
                   key={tier.rank}
                   className={`relative flex flex-col border p-8 transition-all ${
                     isPopular
-                      ? "border-gold bg-charcoal shadow-[0_0_40px_-12px_rgba(201,162,39,0.35)] lg:-translate-y-3"
+                      ? "border-gold bg-charcoal shadow-[0_0_40px_-12px_rgba(174,220,234,0.35)] lg:-translate-y-3"
                       : isElite
-                        ? "border-crimson/60 bg-gradient-to-b from-burgundy-deep to-charcoal shadow-[0_0_40px_-12px_rgba(140,19,39,0.5)]"
+                        ? "border-crimson/60 bg-gradient-to-b from-burgundy-deep to-charcoal shadow-[0_0_40px_-12px_rgba(58,169,214,0.5)]"
                         : "border-white/10 bg-charcoal"
                   }`}
                 >

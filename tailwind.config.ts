@@ -5,16 +5,16 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        void: "#0C0407",
-        charcoal: "#1A0E12",
-        panel: "#200F14",
-        burgundy: "#4A0E1C",
-        "burgundy-deep": "#2B0810",
-        crimson: "#8C1327",
-        royal: "#131B3D",
-        gold: "#C9A227",
-        "gold-dim": "#8A741E",
-        bone: "#F3EFE6",
+        void: "#05080D",
+        charcoal: "#0D1522",
+        panel: "#101D2E",
+        burgundy: "#123252",
+        "burgundy-deep": "#081B2E",
+        crimson: "#3AA9D6",
+        royal: "#17244A",
+        gold: "#AEDCEA",
+        "gold-dim": "#6E93A6",
+        bone: "#EAF3F7",
       },
       fontFamily: {
         display: ["var(--font-fraunces)", "serif"],
@@ -27,11 +27,11 @@ const config: Config = {
       },
       backgroundImage: {
         "seal-radial":
-          "radial-gradient(circle at center, rgba(201,162,39,0.16) 0%, rgba(201,162,39,0) 70%)",
+          "radial-gradient(circle at center, rgba(174,220,234,0.16) 0%, rgba(174,220,234,0) 70%)",
         "burgundy-wash":
-          "linear-gradient(180deg, rgba(74,14,28,0.35) 0%, rgba(12,4,7,0) 100%)",
+          "linear-gradient(180deg, rgba(18,50,82,0.35) 0%, rgba(5,8,13,0) 100%)",
         "burgundy-vignette":
-          "radial-gradient(120% 80% at 50% 0%, rgba(74,14,28,0.55) 0%, rgba(12,4,7,0) 60%)",
+          "radial-gradient(120% 80% at 50% 0%, rgba(18,50,82,0.55) 0%, rgba(5,8,13,0) 60%)",
         "grain":
           "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E\")",
         "glass-sheen":
@@ -46,15 +46,15 @@ const config: Config = {
         // Elevated hover state — lifts further off the page and picks up
         // a soft gold rim-glow, like catching light as it tilts.
         "depth-lg":
-          "inset 0 1px 0 0 rgba(255,255,255,0.07), inset 0 -1px 0 0 rgba(0,0,0,0.5), 0 28px 52px -18px rgba(0,0,0,0.75), 0 0 44px -10px rgba(201,162,39,0.4)",
+          "inset 0 1px 0 0 rgba(255,255,255,0.07), inset 0 -1px 0 0 rgba(0,0,0,0.5), 0 28px 52px -18px rgba(0,0,0,0.75), 0 0 44px -10px rgba(174,220,234,0.4)",
         // Frosted glass surfaces (nav, dropdowns, drawers) — a thin top
         // highlight plus soft ambient shadow instead of a hard border.
         glass: "inset 0 1px 0 0 rgba(255,255,255,0.06), 0 8px 32px -8px rgba(0,0,0,0.55)",
         // Tactile, pressable gold buttons.
         "btn-3d":
-          "inset 0 1px 0 0 rgba(255,255,255,0.35), inset 0 -2px 0 0 rgba(0,0,0,0.22), 0 10px 22px -8px rgba(201,162,39,0.45)",
+          "inset 0 1px 0 0 rgba(255,255,255,0.35), inset 0 -2px 0 0 rgba(0,0,0,0.22), 0 10px 22px -8px rgba(174,220,234,0.45)",
         "btn-3d-active":
-          "inset 0 1px 3px 0 rgba(0,0,0,0.3), 0 2px 8px -3px rgba(201,162,39,0.35)",
+          "inset 0 1px 3px 0 rgba(0,0,0,0.3), 0 2px 8px -3px rgba(174,220,234,0.35)",
       },
     },
   },
