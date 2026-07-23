@@ -12,7 +12,8 @@ const NAV_LINKS = [
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-white/10 bg-void/80 backdrop-blur-md">
+    <header className="glass-panel fixed top-0 left-0 right-0 z-50 border-x-0 border-t-0">
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       <div className="mx-auto flex max-w-[1440px] items-center justify-between px-6 py-4 lg:px-10">
         <Link href="/" className="flex items-center gap-3">
           <SealMark className="h-7 w-7 text-gold" />

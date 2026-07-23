@@ -26,7 +26,7 @@ export function AddToCartButton({ product }: { product: Product }) {
     <button
       onClick={handleClick}
       disabled={inCart}
-      className="w-full border border-gold bg-gold px-8 py-4 font-mono text-[11px] uppercase tracking-eyebrow text-void transition-colors hover:bg-transparent hover:text-gold disabled:cursor-default disabled:border-white/20 disabled:bg-transparent disabled:text-bone/50 sm:w-auto"
+      className="btn-3d w-full px-8 py-4 font-mono text-[11px] uppercase tracking-eyebrow hover:bg-transparent hover:text-gold disabled:cursor-default disabled:translate-y-0 disabled:border-white/20 disabled:bg-transparent disabled:text-bone/50 disabled:shadow-none sm:w-auto"
     >
       {inCart ? "In Cart" : justAdded ? "Added ✓" : "Add to Cart"}
     </button>
